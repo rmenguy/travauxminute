@@ -242,7 +242,7 @@ h3{font-size:22px}
 
 @media (max-width:620px){
   html{scroll-padding-top:70px}
-  body{padding-bottom:82px}
+  body{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
   .container{width:calc(100% - 28px)}
 
   .site-header{background:rgba(255,255,255,.96);backdrop-filter:blur(22px)}
@@ -251,15 +251,21 @@ h3{font-size:22px}
   .brand-mark{width:34px;height:34px;border-radius:10px}
 
   .hero{
-    padding:26px 0 16px;
+    padding:44px 0 24px;
     background:
       radial-gradient(circle at 88% 12%,rgba(255,91,54,.13),transparent 26%),
       linear-gradient(180deg,#fff 0%,#f7f8fa 100%);
   }
-  .hero-grid{gap:24px}
-  .eyebrow{font-size:10px;letter-spacing:.1em}
-  h1{font-size:42px;line-height:.98;letter-spacing:-.055em}
-  .hero-lead{font-size:17px;line-height:1.5;margin:18px 0 20px}
+  .hero-grid{gap:32px}
+  .hero .eyebrow{
+    font-size:10px;line-height:1.6;letter-spacing:.1em;
+    align-items:flex-start;margin-bottom:18px
+  }
+  .hero .pulse{flex-shrink:0;margin-top:4px}
+  .hero h1{
+    font-size:clamp(36px,10.5vw,42px);line-height:1.08;letter-spacing:-.045em
+  }
+  .hero-lead{font-size:17px;line-height:1.55;margin:22px 0 26px}
   .hero-actions{display:grid;grid-template-columns:1fr}
   .hero-actions .btn{width:100%;min-height:54px}
   .hero-actions .btn-ghost{display:none}
@@ -358,7 +364,13 @@ h3{font-size:22px}
     min-height:50px;border-radius:14px
   }
   .lead-form textarea{min-height:110px}
-  .form-actions{position:sticky;bottom:82px;background:#fff;padding-top:10px;z-index:2}
+  .lead-form{scroll-margin-top:84px}
+  .lead-form input,.lead-form select,.lead-form textarea{
+    scroll-margin-top:84px;scroll-margin-bottom:24px
+  }
+  /* Keep navigation below the fields, including when the keyboard is open. */
+  .form-actions{position:static;margin-top:24px;padding-top:0}
+  .form-actions .btn{min-width:0;font-size:14px;padding-inline:12px}
   .form-actions .btn{min-height:52px}
 
   .faq-wrap{gap:24px}
@@ -378,6 +390,9 @@ h3{font-size:22px}
     box-shadow:0 14px 38px rgba(8,17,30,.22);
     padding-bottom:max(7px,env(safe-area-inset-bottom));
   }
+  /* The form has its own actions; a second fixed bar would obscure inputs. */
+  body.form-in-view .mobile-action-bar,
+  body:has(.lead-form :focus) .mobile-action-bar{display:none}
   .mobile-action{
     min-height:56px;border-radius:15px;text-decoration:none;
     display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px
