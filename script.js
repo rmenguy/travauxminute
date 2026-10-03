@@ -14,25 +14,45 @@
     if(value) sessionStorage.setItem('tm_'+key,value);
   });
 
+  // Hide the fixed mobile shortcuts whenever the form is visible or focused.
+  // Observing the whole form also covers tall steps and viewport/keyboard changes.
+  let formInView = false;
+  function updateMobileActions(){
+    document.body.classList.toggle('form-in-view',
+      formInView || form.contains(document.activeElement));
+  }
+  if('IntersectionObserver' in window){
+    const observer = new IntersectionObserver(entries=>{
+      formInView = entries[0].isIntersecting;
+      updateMobileActions();
+    });
+    observer.observe(form);
+  }
+  form.addEventListener('focusin', updateMobileActions);
+  form.addEventListener('focusout', ()=>requestAnimationFrame(updateMobileActions));
+
   function showStep(n){
     step = n;
     steps.forEach(s=>s.classList.toggle('active', Number(s.dataset.step)===n));
     progress.style.width = (n*25)+'%';
     if(n===4) buildSummary();
-    form.scrollIntoView({behavior:'smooth',block:'center'});
+    const mobile = window.matchMedia('(max-width:620px)').matches;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    form.scrollIntoView({
+      behavior:reducedMotion ? 'instant' : 'smooth',
+      block:mobile ? 'start' : 'center'
+    });
   }
 
   function currentValid(){
     const active = document.querySelector('.form-step.active');
-    const fields = [...active.querySelectorAll('input,select,textarea')].filter(el=>el.hasAttribute('required'));
-    let ok = true;
-    fields.forEach(el=>{
-      if(!el.checkValidity()){
-        el.reportValidity();
-        ok = false;
-      }
-    });
-    return ok;
+    const fields = [...active.querySelectorAll('input,select,textarea')];
+    const invalid = fields.find(el=>!el.checkValidity());
+    if(invalid){
+      invalid.reportValidity();
+      return false;
+    }
+    return true;
   }
 
   function buildSummary(){
