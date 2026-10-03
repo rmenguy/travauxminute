@@ -257,6 +257,8 @@ h3{font-size:22px}
       linear-gradient(180deg,#fff 0%,#f7f8fa 100%);
   }
   .hero-grid{gap:32px}
+  .eyebrow{font-size:10px;letter-spacing:.1em}
+  h1{font-size:42px;line-height:.98;letter-spacing:-.055em}
   .hero .eyebrow{
     font-size:10px;line-height:1.6;letter-spacing:.1em;
     align-items:flex-start;margin-bottom:18px
@@ -391,7 +393,7 @@ h3{font-size:22px}
     padding-bottom:max(7px,env(safe-area-inset-bottom));
   }
   /* The form has its own actions; a second fixed bar would obscure inputs. */
-  body.form-in-view .mobile-action-bar,
+  body.form-in-view .mobile-action-bar{display:none}
   body:has(.lead-form :focus) .mobile-action-bar{display:none}
   .mobile-action{
     min-height:56px;border-radius:15px;text-decoration:none;
